@@ -8,5 +8,6 @@ pip3 install jinja2
 # Run
 
 ```
+cd app/
 uvicorn main:app
 ```
