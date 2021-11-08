@@ -10,6 +10,7 @@ from fastapi.templating import Jinja2Templates
 from substrateinterface import SubstrateInterface, Keypair
 import nacl.secret
 import base64
+import robonomicsinterface as RI
 
 
 app = FastAPI()
@@ -34,3 +35,18 @@ async def str_decoding(request: Request, data: str = Form(...)):
     except Exception as e:
         return f"error occured: {e}"
     return decrypted
+
+@app.get("/datalog")
+async def get_data_datalog():
+    interface = RI.RobonomicsInterface()
+    mnemonic = KEYS["seed"]
+    kp = Keypair.create_from_mnemonic(mnemonic, ss58_format=32)
+    seed = kp.seed_hex
+    b = bytes(seed[0:32], "utf8")
+    box = nacl.secret.SecretBox(b)
+    pub_key = KEYS["public"]
+    for i in range(10):
+        record = interface.fetch_datalog(pub_key, i)
+        decrypted = box.decrypt(base64.b64decode(record["payload"])).decode()
+        if "aqara_humidity" or "aqara_temp" in decrypted:
+            return decrypted
