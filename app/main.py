@@ -61,6 +61,17 @@ async def get_data_datalog():
 @app.post("/updated")
 async def send_to_datalog(request: Request, data: str = Form(...)):
     print(data)
+    mnemonic = KEYS["seed"]
+    interface = RI.RobonomicsInterface(seed=mnemonic)
+    kp = Keypair.create_from_mnemonic(mnemonic, ss58_format=32)
+    seed = kp.seed_hex
+    b = bytes(seed[0:32], "utf8")
+    box = nacl.secret.SecretBox(b)
+    encrypted = box.encrypt(bytes(data))
+    print(encrypted)
+    decrypted = box.decrypt(encrypted)
+    print(decrypted)
+    
     return "hello"
 
 
