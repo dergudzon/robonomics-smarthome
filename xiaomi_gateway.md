@@ -7,6 +7,7 @@ You need your gateway with all sensors to be connected to the Mi Home app. If yo
 Start Home Assistant if you haven't done it yet:
 ```bash
 cd /srv/homeassistant
+source bin/activate
 hass
 ```
 
