@@ -61,7 +61,12 @@ automation:
         entity_id:
           - vacuum.robot_vacuum
 ```
-Then download the script [control.py](scripts/control.py). Before running export your mnemonic seed:
+Then download the script [control.py](scripts/control.py) to your python_scripts directory:
+```bash
+cd /srv/homeassistant/python_scripts
+wget https://raw.githubusercontent.com/tubleronchik/robonomics-smarthome/main/scripts/control.py
+```
+Before running export your mnemonic seed:
 ```bash
 export MNEMONIC_SEED=<mnemonic>
 ```
