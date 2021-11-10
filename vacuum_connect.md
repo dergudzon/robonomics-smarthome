@@ -72,13 +72,13 @@ python3 control.py
 Now you can create datalog in your account to command robot to Start Cleaning, to Pause or to Return to Base. The message must be encrypted. you can send encrypted message with [send_datalog.py](scripts/send_datalog.py) script that you used in [Raspberry Setup](raspberry_setup.py) page.
 Run the script with message to start cleaning:
 ```bash
-python3 send_datalog.py '{"agent": "vacuum_start", "parameter": ""}'
+python3 send_datalog.py '{"agent": "vacuum_start"}'
 ```
 to pause:
 ```bash
-python3 send_datalog.py '{"agent": "vacuum_pause", "parameter": ""}'
+python3 send_datalog.py '{"agent": "vacuum_pause"}'
 ```
 to return to base:
 ```bash
-python3 send_datalog.py '{"agent": "vacuum_return_to_base", "parameter": ""}'
+python3 send_datalog.py '{"agent": "vacuum_return_to_base"}'
 ```
