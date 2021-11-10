@@ -20,4 +20,4 @@ Also you can connect some devices directly through Mi Home app (for example, Vac
 2. Then you need to connect devices:
 - [Connection with zigbee2MQTT](zigbee2MQTT.md)
 - [Connection through Xiaomi Gateway](xiaomi_gateway.md)
-- [Connect Vacuum Cleaner](vacuum_connection.md)
+- [Connect Vacuum Cleaner](vacuum_connect.md)
