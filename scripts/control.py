@@ -52,7 +52,6 @@ def request_sender(command: dict, url: str):
         c.setopt(pycurl.POSTFIELDS, data)
         c.setopt(pycurl.URL, url)
         c.setopt(pycurl.HTTPHEADER, ["Content-Type: application/json"])
-        c.setopt(pycurl.VERBOSE, 1)
         c.perform()
     except Exception as e:
         print(e)
