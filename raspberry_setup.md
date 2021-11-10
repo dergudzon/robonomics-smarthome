@@ -54,17 +54,6 @@ ssh ubuntu@192.168.43.56
 ```
 Password is "ubuntu".
 
-## Substrate Interface
-
-To pub data to Robonomics you need to install `substrate-interface` python package (you need to install RUST before):
-
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-source $HOME/.cargo/env
-rustup default nightly
-pip3 install substrate-interface
-```
-
 ## Home Assistant
 
 Now we need to install Home Assistant to Raspberry. Installation instructions are [here](https://www.home-assistant.io/installation/linux#install-home-assistant-core). You need to install `Home Assistant Core`.
@@ -126,4 +115,17 @@ call = substrate.compose_call(
 extrinsic = substrate.create_signed_extrinsic(call=call, keypair=keypair)
 receipt = substrate.submit_extrinsic(extrinsic, wait_for_inclusion=True)
 print(f"Datalog created with extrinsic hash: {receipt.extrinsic_hash}")
+```
+
+## Substrate Interface
+
+To pub data to Robonomics you need to install `substrate-interface` python package (you need to install RUST before) to your virtual environment:
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+rustup default nightly
+cd /srv/homeassistant
+source bin/activate
+pip3 install substrate-interface
 ```
