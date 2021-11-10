@@ -1,16 +1,16 @@
 from substrateinterface import SubstrateInterface, Keypair
 from substrateinterface.exceptions import SubstrateRequestException
 import time
-#import paho.mqtt.client as mqtt
+import os
 from urllib import request, parse
-import json
+import json, pycurl
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 import binascii
 import base64
 import nacl.secret
 
-mnemonic = "stick employ ill math whip cover gun unable ketchup gauge six foil"
+mnemonic = os.environ['MNEMONIC_SEED']
 keypair = Keypair.create_from_mnemonic(mnemonic, ss58_format=32)
 seed = keypair.seed_hex
 b = bytes(seed[0:32], "utf8")
@@ -38,27 +38,25 @@ def connect():
                     },
                 }
             }
-
             )
             return substrate
     except ConnectionRefusedError:
         print("?? No local Substrate node running, try running 'start_local_substrate_node.sh' first")
         exit()
-
+        
 def request_sender(command: dict, url: str):
-    print("rs")
-    print(command)
     data = json.dumps(command)
-    print(data)
-    data = parse.urlencode(command)
-    data = data.encode('utf-8')
-    print(data)     
     try:
-        req =  request.Request(url, data=data) 
-        resp = request.urlopen(req)
-        print(f"sent post request with result {req}")
+        c = pycurl.Curl()
+        c.setopt(pycurl.POST, 1)
+        c.setopt(pycurl.POSTFIELDS, data)
+        c.setopt(pycurl.URL, url)
+        c.setopt(pycurl.HTTPHEADER, ["Content-Type: application/json"])
+        c.setopt(pycurl.VERBOSE, 1)
+        c.perform()
     except Exception as e:
         print(e)
+
 def listener():
     substrate = connect()
     agents = [
@@ -74,7 +72,7 @@ def listener():
             for e in events:
                 if e.value["event_id"] == "NewRecord":
                     if any(x in e.params for x in agent_public_keys):
-                        print(f"new recrod {e}")
+                        print(f"new record {e}")
                         for p in e.params:
                             print(p)
                             if p["type"] == "Record":
@@ -84,14 +82,9 @@ def listener():
                                     order = json.loads(decrypted)
                                     agent = order["agent"]
                                     del order["agent"]
-                                    print(order)
-                                    print("!")
-                                    #command = order["parameter"]
-                                    #print(command)
                                     request_sender(order, "http://localhost:8123/api/webhook/" + agent)  
                                 except Exception as e:
                                     print(f"Exception: {e}")
             time.sleep(12)
 
 listener()
-
