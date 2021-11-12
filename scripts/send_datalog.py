@@ -1,8 +1,6 @@
 from substrateinterface import SubstrateInterface, Keypair
 import time
 import sys
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_OAEP
 import binascii
 import nacl.secret
 import base64
