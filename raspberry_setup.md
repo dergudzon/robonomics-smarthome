@@ -129,11 +129,11 @@ The install RUST:
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
 rustup default nightly
+```
+And install nessesary python packages to the virtual environment
+```bash
 cd /srv/homeassistant
 source bin/activate
-```
-And install nessesary python packages to 
-```bash
 pip3 install nacl packaging substrate-interface
 ```
 > You may have problems with new substrate-interface versions, this instruction was tested on `substrate-interface==0.13.9` and `scalecodec==0.11.15`, so if you have problems install them:
