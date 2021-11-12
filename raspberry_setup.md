@@ -61,7 +61,9 @@ Now we need to install Home Assistant to Raspberry. Installation instructions ar
 After installation create `send_datalog.py` script that will send receiving data to Robonomics:
 
 ```bash
-sudo nano /srv/homeassistant/python_scripts/send_datalog.py
+cd /srv/homeassistant/
+mkdir python_scripts
+sudo nano python_scripts/send_datalog.py
 ```
 
 And add the folloving (replace `<mnemonic>` with mnemonic seed from your account in Robonomics Network):
@@ -117,7 +119,11 @@ print(f"Datalog created with extrinsic hash: {receipt.extrinsic_hash}")
 
 ## Substrate Interface
 
-To pub data to Robonomics you need to install `substrate-interface` python package (you need to install RUST before) to your virtual environment:
+To pub data to Robonomics you need to install `substrate-interface` python package (you need to install RUST before) to your raspberry. Be sure that you're logged in as `homeassistant` user, if not do the following:
+```bash
+sudo -u homeassistant -H -s
+```
+The install RUST:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -125,5 +131,13 @@ source $HOME/.cargo/env
 rustup default nightly
 cd /srv/homeassistant
 source bin/activate
-pip3 install substrate-interface
 ```
+And install nessesary python packages to 
+```bash
+pip3 install nacl packaging substrate-interface
+```
+> You may have problems with new substrate-interface versions, this instruction was tested on `substrate-interface==0.13.9` and `scalecodec==0.11.15`, so if you have problems install them:
+> ```bash
+> pip3 install substrate-interface==0.13.9
+> pip3 install scalecodec==0.11.15
+> ```
