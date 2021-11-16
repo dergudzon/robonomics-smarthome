@@ -27,7 +27,7 @@ Then we need to setup action to control Vacuum through Robonomics. For that open
 nano ~/.homeassistant/configuration.yaml
 ```
 
-And add following to the end of the file:
+And add following to the end of the file (full config file you can find [here](configuration.yaml)):
 
 ```yaml
 automation:

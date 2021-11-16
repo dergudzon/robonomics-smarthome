@@ -1,0 +1,152 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+group: !include groups.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+mqtt:
+  broker: localhost
+  port: 1883
+
+automation:
+  - alias: "send_datalog_temperature_sensor"
+    trigger:
+      platform: time_pattern
+      minutes: "/1"
+    action:
+      service: shell_command.send_datalog_temperature_sensor
+
+  - alias: "send_datalog_contact_sensor"
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.contact_sensor
+    action:
+      service: shell_command.send_datalog_contact_sensor
+
+  - alias: "vacuum_start"
+    trigger:
+      platform: webhook
+      webhook_id: "vacuum_start"
+    action:
+      service: vacuum.start
+      target:
+        entity_id:
+          - vacuum.robot_vacuum
+
+  - alias: "vacuum_pause"
+    trigger:
+      platform: webhook
+      webhook_id: "vacuum_pause"
+    action:
+      service: vacuum.pause 
+      target:
+        entity_id:
+          - vacuum.robot_vacuum
+
+  - alias: "vacuum_return_to_base"
+    trigger:
+      platform: webhook
+      webhook_id: "vacuum_return_to_base"
+    action:
+      service: vacuum.return_to_base
+      target:
+        entity_id:
+          - vacuum.robot_vacuum
+
+  - alias: "shapes_on"
+    trigger:
+      platform: webhook
+      webhook_id: "shapes_on"
+    action:
+      service: light.turn_on
+      target:
+        entity_id: 
+        - light.shapes_9275
+
+  - alias: "shapes_off"
+    trigger:
+      platform: webhook
+      webhook_id: "shapes_off"
+    action:
+      service: light.turn_off
+      target:
+        entity_id: 
+        - light.shapes_9275
+
+  - alias: "shapes_brightness"
+    trigger:
+      platform: webhook
+      webhook_id: "shapes_brightness"
+    action:
+      service: light.turn_on
+      target:
+        entity_id:
+          - light.shapes_9275
+      data:
+        brightness: '{{ trigger.json.brightness }}'
+
+  - alias: "shapes_color"
+    trigger:
+      platform: webhook
+      webhook_id: "shapes_color"
+    action:
+      service: light.turn_on
+      target:
+        entity_id:
+          - light.shapes_9275
+      data:
+        rgb_color: '[{{ trigger.json.r }}, {{ trigger.json.g }}, {{ trigger.json.b }}]'
+
+  - alias: "shapes_color"
+    trigger:
+      platform: webhook
+      webhook_id: "shapes_effect"
+    action:
+      service: light.turn_on
+      target:
+        entity_id:
+          - light.shapes_9275
+      data:
+        effect: '{{ trigger.json.effect }}'
+
+  - alias: "lightbulb_on"
+    trigger:
+      platform: webhook
+      webhook_id: "lightbulb_on"
+    action:
+      service: light.turn_on
+      target:
+        entity_id: 
+        - light.lightbulb
+
+  - alias: "lightbulb_off"
+    trigger:
+      platform: webhook
+      webhook_id: "lightbulb_off"
+    action:
+      service: light.turn_off
+      target:
+        entity_id: 
+        - light.lightbulb
+  
+  - alias: "lightbulb_brightness"
+    trigger:
+      platform: webhook
+      webhook_id: "lightbulb_brightness"
+    action:
+      service: light.turn_on
+      target:
+        entity_id: 
+        - light.lightbulb
+      data:
+        brightness: '{{ trigger.json.brightness }}'
+
+shell_command:
+  send_datalog_temperature_sensor: 'python3 python_scripts/send_datalog.py sensor_humidity={{ states("sensor.temperature_sensor_humidity") }} sensor_temp={{ states("sensor.temperature_sensor_temperature") }} sensor_battery={{ states("sensor.temperature_sensor_battery") }}'
+  send_datalog_contact_sensor: 'python3 python_scripts/send_datalog.py sensor_contact={{ states("binary_sensor.contact_sensor") }}'

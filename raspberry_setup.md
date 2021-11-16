@@ -54,17 +54,44 @@ ssh ubuntu@192.168.43.56
 ```
 Password is "ubuntu".
 
+Also you need to install `screen`. It's a terminal multiplexer, so you will be able to open multiply terminals, that will not shut down when you disconnect from rasbberry:
+
+```bash
+sudo apt-get install screen
+```
+To open new terminal write:
+
+```bash
+screen
+```
+![screen](media/screen.png)
+To connect to the working terminal use (you can do that after every reconnection if you didn't kill screen):
+```bash
+screen -x
+```
+
+The basic commands for work with `screen` can be found [here](https://linuxize.com/post/how-to-use-linux-screen/#working-with-linux-screen-windows).
+
 ## Home Assistant
 
 Now we need to install Home Assistant to Raspberry. Installation instructions are [here](https://www.home-assistant.io/installation/linux#install-home-assistant-core). You need to install `Home Assistant Core`.
 
-After installation create `send_datalog.py` script that will send receiving data to Robonomics:
+After installation you must be under `homeassistant` user. If you are not log in:
+```bash
+sudo -u homeassistant -H -s
+```
+Create `send_datalog.py` script that will send receiving data to Robonomics:
 
 ```bash
 cd /srv/homeassistant/
 mkdir python_scripts
 sudo nano python_scripts/send_datalog.py
 ```
+
+> Also you can download it with:
+> ```bash
+> wget https://raw.githubusercontent.com/tubleronchik/robonomics-smarthome/main/scripts/send_datalog.py
+> ```
 
 And add the folloving (replace `<mnemonic>` with mnemonic seed from your account in Robonomics Network):
 ```python
@@ -123,21 +150,17 @@ To pub data to Robonomics you need to install `substrate-interface` python packa
 ```bash
 sudo -u homeassistant -H -s
 ```
-The install RUST:
-
+Then install RUST:
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
 rustup default nightly
 ```
-And install nessesary python packages to the virtual environment
+And install nessesary python packages to the virtual environment:
 ```bash
 cd /srv/homeassistant
 source bin/activate
-pip3 install nacl packaging substrate-interface
+pip3 install nacl packaging
+pip3 install substrate-interface==0.13.9
+pip3 install scalecodec==0.11.15
 ```
-> You may have problems with new substrate-interface versions, this instruction was tested on `substrate-interface==0.13.9` and `scalecodec==0.11.15`, so if you have problems install them:
-> ```bash
-> pip3 install substrate-interface==0.13.9
-> pip3 install scalecodec==0.11.15
-> ```

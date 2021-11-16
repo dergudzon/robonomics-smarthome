@@ -39,7 +39,7 @@ Then we need to setup action to send data to Robonomics. For that open a configu
 nano ~/.homeassistant/configuration.yaml
 ```
 
-And add following to the end of file:
+And add following to the end of the file (full config file you can find [here](configuration.yaml)):
 
 ```
 automation:
@@ -65,7 +65,7 @@ shell_command:
 
 You can choose how often you want to send data with changing the value in `minutes: "/5"`.
 
->The names of the data in `shell_command` like `temperature_sensor_humidity` may be different. You can find your option in `Configuration/Entities`. Find your sensor and copy Entity ID.
+>The names of the data in `shell_command` like `sensor.temperature_sensor_humidity` may be different. You can find your option in `Configuration/Entities`. Find your sensor and copy Entity ID.
 >
 >![entity_id](media/entity_id.png)
 
