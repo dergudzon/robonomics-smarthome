@@ -9,8 +9,12 @@ from Crypto.Cipher import PKCS1_OAEP
 import binascii
 import base64
 import nacl.secret
+import configparser
+                  
+config = configparser.ConfigParser()
+config.read('python_scripts/config.config')
+mnemonic = config.get('secrets', 'MNEMONIC_SEED')
 
-mnemonic = os.environ['MNEMONIC_SEED']
 keypair = Keypair.create_from_mnemonic(mnemonic, ss58_format=32)
 seed = keypair.seed_hex
 b = bytes(seed[0:32], "utf8")
