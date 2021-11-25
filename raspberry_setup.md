@@ -80,68 +80,21 @@ After installation you must be under `homeassistant` user. If you are not log in
 ```bash
 sudo -u homeassistant -H -s
 ```
-Create `send_datalog.py` script that will send receiving data to Robonomics:
+From `scripts` folder import `send_datalog.py` script which will send received data to Robonomics, `control.py` which allows home assistant to receive commands from datalog, and file `config.config`, containing mnemonic seed:
 
 ```bash
 cd /srv/homeassistant/
 mkdir python_scripts
-sudo nano python_scripts/send_datalog.py
+cd /python_scripts/
+wget https://raw.githubusercontent.com/tubleronchik/robonomics-smarthome/main/scripts/send_datalog.py
+wget https://raw.githubusercontent.com/tubleronchik/robonomics-smarthome/main/scripts/control.py
+wget https://raw.githubusercontent.com/tubleronchik/robonomics-smarthome/main/scripts/config.config
 ```
 
-> Also you can download it with:
-> ```bash
-> wget https://raw.githubusercontent.com/tubleronchik/robonomics-smarthome/main/scripts/send_datalog.py
-> ```
-
-And add the folloving (replace `<mnemonic>` with mnemonic seed from your account in Robonomics Network):
-```python
-from substrateinterface import SubstrateInterface, Keypair
-import time
-import sys
-import binascii
-import nacl.secret
-import base64
-
-mnemonic = <mnemonic>
-substrate = SubstrateInterface(
-                    url="wss://main.frontier.rpc.robonomics.network",
-                    ss58_format=32,
-                    type_registry_preset="substrate-node-template",
-                    type_registry={
-                        "types": {
-                            "Record": "Vec<u8>",
-                            "<T as frame_system::Config>::AccountId": "AccountId",
-                            "RingBufferItem": {
-                                "type": "struct",
-                                "type_mapping": [
-                                    ["timestamp", "Compact<u64>"],
-                                    ["payload", "Vec<u8>"],
-                                ],
-                            },
-                        }
-                    }
-                )
-
-keypair = Keypair.create_from_mnemonic(mnemonic, ss58_format=32)
-seed = keypair.seed_hex
-b = bytes(seed[0:32], "utf8")
-box = nacl.secret.SecretBox(b)
-data = ' '.join(sys.argv[1:])
-data = bytes(data, 'utf-8')
-
-encrypted = box.encrypt(data)
-text = base64.b64encode(encrypted).decode("ascii")
-print(f"Got message: {data}")
-call = substrate.compose_call(
-        call_module="Datalog",
-        call_function="record",
-        call_params={
-            'record': text
-        }
-    )
-extrinsic = substrate.create_signed_extrinsic(call=call, keypair=keypair)
-receipt = substrate.submit_extrinsic(extrinsic, wait_for_inclusion=True)
-print(f"Datalog created with extrinsic hash: {receipt.extrinsic_hash}")
+Add mnemonic seed from your account in config.config:
+```
+[secrets]
+MNEMONIC_SEED = <your mnemonic>
 ```
 
 ## Substrate Interface
@@ -164,3 +117,63 @@ pip3 install nacl packaging
 pip3 install substrate-interface==0.13.9
 pip3 install scalecodec==0.11.15
 ```
+## Systemd services
+
+Now change user (you can run under any user, which allows you to use sudo):
+
+```bash
+su ubuntu
+```
+
+Move to /etc/systemd/system and create new service for home assistant start: 
+
+```bash
+cd /etc/systemd/system
+sudo nano home-assistant@homeassistant.service 
+```
+
+Paste the following:
+
+```
+[Unit]
+Description=Home Assistant
+After=network-online.target
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/srv/%i/
+ExecStart=/srv/homeassistant/bin/hass -c "/home/%i/.homeassistant"
+Environment="PATH=/srv/%i/bin"
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Do the same for robonomics control service:
+
+```bash
+sudo nano robonomics-contol@homeassistant.service 
+```
+With:
+
+```
+[Unit]
+Description=Robonomics Control
+After=network-online.target
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/srv/%i/
+ExecStart=/srv/homeassistant/bin/python3.8 "/srv/%i/python_scripts/control.py"
+Environment="PATH=/srv/%i/bin"
+
+[Install]
+WantedBy=multi-user.target
+```
+
+And enable both services:
+```
+sudo systemctl enable home-assistant@homeassistant.service
+sudo systemctl enable robonomics-contol@homeassistant.service
+```
+
