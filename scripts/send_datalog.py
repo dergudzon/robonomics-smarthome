@@ -4,8 +4,12 @@ import sys
 import binascii
 import nacl.secret
 import base64
+import configparser
 
-mnemonic = <mnemonic>
+config = configparser.ConfigParser()
+config.read('python_scripts/config.config')
+mnemonic = config.get('secrets', 'MNEMONIC_SEED')
+
 substrate = SubstrateInterface(
                     url="wss://main.frontier.rpc.robonomics.network",
                     ss58_format=32,
