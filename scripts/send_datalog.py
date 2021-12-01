@@ -7,7 +7,7 @@ import base64
 import configparser
 
 config = configparser.ConfigParser()
-config.read('python_scripts/config.config')
+config.read('/srv/homeassistant/python_scripts/config.config')
 mnemonic = config.get('secrets', 'MNEMONIC_SEED')
 
 substrate = SubstrateInterface(
