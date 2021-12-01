@@ -12,7 +12,7 @@ import nacl.secret
 import configparser
                   
 config = configparser.ConfigParser()
-config.read('python_scripts/config.config')
+config.read('/srv/homeassistant/python_scripts/config.config')
 mnemonic = config.get('secrets', 'MNEMONIC_SEED')
 
 keypair = Keypair.create_from_mnemonic(mnemonic, ss58_format=32)
