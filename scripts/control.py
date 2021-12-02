@@ -4,19 +4,14 @@ import time
 import os
 from urllib import request, parse
 import json, pycurl
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_OAEP
 import binascii
 import base64
 import nacl.secret
-import configparser
-                  
-config = configparser.ConfigParser()
-config.read('/srv/homeassistant/python_scripts/config.config')
-mnemonic = config.get('secrets', 'MNEMONIC_SEED')
 
+mnemonic = os.environ['MNEMONIC_SEED']
 keypair = Keypair.create_from_mnemonic(mnemonic, ss58_format=32)
 seed = keypair.seed_hex
+address = keypair.ss58_address
 b = bytes(seed[0:32], "utf8")
 box = nacl.secret.SecretBox(b)
 
@@ -60,10 +55,10 @@ def request_sender(command: dict, url: str):
     except Exception as e:
         print(e)
 
-def listener():
+def listener(address):
     substrate = connect()
     agents = [
-        "4Hd5Zkcu1qubGBi6Lxn59eoZ88osfN53TzxXTVTKUBaEeAuM"
+        address
         ]
     agent_public_keys = []
     for a in agents:
@@ -79,15 +74,17 @@ def listener():
                         for p in e.params:
                             print(p)
                             if p["type"] == "Record":
+                                print(f"data: {p['value']}")
                                 decrypted = box.decrypt(base64.b64decode(p["value"]))
                                 print(f"decrypted {decrypted}")
                                 try:
                                     order = json.loads(decrypted)
                                     agent = order["agent"]
                                     del order["agent"]
-                                    request_sender(order, "http://localhost:8123/api/webhook/" + agent)  
+                                    request_sender(order, "http://localhost:8123/api/webhook/" + agent)
                                 except Exception as e:
                                     print(f"Exception: {e}")
             time.sleep(12)
 
-listener()
+listener(address)
+
