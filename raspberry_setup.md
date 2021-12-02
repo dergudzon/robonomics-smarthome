@@ -93,6 +93,7 @@ rustup default nightly
 ```
 And install nessesary python packages to the virtual environment:
 ```bash
+sudo apt install libcurl4-openssl-dev libssl-dev
 cd /srv/homeassistant
 source bin/activate
 pip3 install pynacl packaging pycurl
