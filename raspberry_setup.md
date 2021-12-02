@@ -67,7 +67,7 @@ From `scripts` folder import `send_datalog.py` script which will send received d
 ```bash
 cd /srv/homeassistant/
 mkdir python_scripts
-cd /python_scripts/
+cd python_scripts/
 wget https://raw.githubusercontent.com/tubleronchik/robonomics-smarthome/main/scripts/send_datalog.py
 wget https://raw.githubusercontent.com/tubleronchik/robonomics-smarthome/main/scripts/control.py
 wget https://raw.githubusercontent.com/tubleronchik/robonomics-smarthome/main/scripts/config.config
