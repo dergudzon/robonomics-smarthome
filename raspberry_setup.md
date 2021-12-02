@@ -96,9 +96,7 @@ And install nessesary python packages to the virtual environment:
 sudo apt install libcurl4-openssl-dev libssl-dev
 cd /srv/homeassistant
 source bin/activate
-pip3 install pynacl packaging pycurl
-pip3 install substrate-interface==0.13.9
-pip3 install scalecodec==0.11.15
+pip3 install pynacl packaging pycurl substrate-interface
 ```
 ## Systemd services
 
