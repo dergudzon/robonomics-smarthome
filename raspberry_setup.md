@@ -54,24 +54,6 @@ ssh ubuntu@192.168.43.56
 ```
 Password is "ubuntu".
 
-Also you need to install `screen`. It's a terminal multiplexer, so you will be able to open multiply terminals, that will not shut down when you disconnect from rasbberry:
-
-```bash
-sudo apt-get install screen
-```
-To open new terminal write:
-
-```bash
-screen
-```
-![screen](media/screen.png)
-To connect to the working terminal use (you can do that after every reconnection if you didn't kill screen):
-```bash
-screen -x
-```
-
-The basic commands for work with `screen` can be found [here](https://linuxize.com/post/how-to-use-linux-screen/#working-with-linux-screen-windows).
-
 ## Home Assistant
 
 Now we need to install Home Assistant to Raspberry. Installation instructions are [here](https://www.home-assistant.io/installation/linux#install-home-assistant-core). You need to install `Home Assistant Core`.
