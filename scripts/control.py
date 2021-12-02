@@ -16,9 +16,8 @@ b = bytes(seed[0:32], "utf8")
 box = nacl.secret.SecretBox(b)
 
 def connect():
-    try:
-            substrate = SubstrateInterface(
-                url="wss://main.frontier.rpc.robonomics.network",
+    substrate = SubstrateInterface(
+            url="wss://main.frontier.rpc.robonomics.network",
             ss58_format=32,
             type_registry_preset="substrate-node-template",
             type_registry= {
@@ -38,10 +37,7 @@ def connect():
                 }
             }
             )
-            return substrate
-    except ConnectionRefusedError:
-        print("?? No local Substrate node running, try running 'start_local_substrate_node.sh' first")
-        exit()
+    return substrate
         
 def request_sender(command: dict, url: str):
     data = json.dumps(command)
