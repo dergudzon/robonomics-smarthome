@@ -70,8 +70,9 @@ def listener(address):
                         for p in e.params:
                             print(p)
                             if p["type"] == "Record":
-                                print(f"data: {p['value']}")
-                                decrypted = box.decrypt(base64.b64decode(p["value"]))
+                                data = bytes.fromhex(p['value'][2:]).decode('utf-8')
+                                print(f"data: {data}")
+                                decrypted = box.decrypt(base64.b64decode(data))
                                 print(f"decrypted {decrypted}")
                                 try:
                                     order = json.loads(decrypted)
