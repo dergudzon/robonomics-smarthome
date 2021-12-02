@@ -13,7 +13,6 @@ import base64
 import robonomicsinterface as RI
 
 
-
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
