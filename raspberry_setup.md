@@ -95,7 +95,7 @@ And install nessesary python packages to the virtual environment:
 ```bash
 cd /srv/homeassistant
 source bin/activate
-pip3 install pynacl packaging
+pip3 install pynacl packaging pycurl
 pip3 install substrate-interface==0.13.9
 pip3 install scalecodec==0.11.15
 ```
