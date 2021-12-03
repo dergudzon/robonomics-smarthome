@@ -134,7 +134,7 @@ WantedBy=multi-user.target
 Do the same for robonomics control service:
 
 ```bash
-sudo nano robonomics-contol@homeassistant.service 
+sudo nano robonomics-control@homeassistant.service 
 ```
 With:
 
@@ -156,6 +156,6 @@ WantedBy=multi-user.target
 And enable both services:
 ```
 sudo systemctl enable home-assistant@homeassistant.service
-sudo systemctl enable robonomics-contol@homeassistant.service
+sudo systemctl enable robonomics-control@homeassistant.service
 ```
 
