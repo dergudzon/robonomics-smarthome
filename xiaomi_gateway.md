@@ -8,13 +8,6 @@ Be sure that you're logged in you raspberry as `homeassistant` user, if not do t
 sudo -u homeassistant -H -s
 ```
 
-Start Home Assistant if you haven't done it yet:
-```bash
-cd /srv/homeassistant
-source bin/activate
-hass
-```
-
 In your Home Assistant:
 ```
 http://<raspberry_address>:8123
@@ -37,9 +30,11 @@ Press `Submit` and you will be able to see your gateway in Integrations page.
 
 You can also connect your hub to Aqara Home app on ios and then add it to Home Assistant through Homekit Controller integration. 
 
-Add your hub to the app using `add device` or `+` button. Right after your hub added to Aqara Home app you will be proposed to bind it with your Homekit account. When you see a menu like the picture below, open your Home Assistant page:
+Add your hub to the app using `add device` or `+` button. Right after your hub added to Aqara Home app you will be proposed to bind it with your Homekit account. 
 
 <img src="https://github.com/tubleronchik/robonomics-smarthome/blob/e4540b5381d60b4d5167f1038828fd334ea79ba9/media/homekit.png" width="400">
+
+When you see a menu like the picture, open your Home Assistant page:
 
 ```
 http://<raspberry_address>:8123

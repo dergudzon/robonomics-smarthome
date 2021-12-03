@@ -16,7 +16,7 @@ Also you can connect some devices directly through Mi Home app (for example, Vac
 
 # Setup
 
-1. Firstly you need to [setup Raspberry Pi](raspberry_setup.md).
+1. Firstly you need to [setup Raspberry Pi](raspberry_setup.md) (also you can [use prepeared image](raspberry_image.md)).
 2. Then you need to connect devices:
 - [Connection with zigbee2MQTT](zigbee2MQTT.md)
 - [Connection through Xiaomi Gateway](xiaomi_gateway.md)
