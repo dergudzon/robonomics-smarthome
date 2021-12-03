@@ -33,6 +33,26 @@ Press `Submit` and choose your Hub (Aqara Hub in this example):
 
 Press `Submit` and you will be able to see your gateway in Integrations page.
 
+## Add Gateway to Home Assistant using Homekit Controller integration
+
+You can also connect your hub to Aqara Home app on ios and then add it to Home Assistant through Homekit Controller integration. 
+
+Add your hub to the app using `add device` or `+` button. Right after your hub added to Aqara Home app you will be proposed to bind it with your Homekit account. When you see a menu like the picture below, open your Home Assistant page:
+
+<img src="https://github.com/tubleronchik/robonomics-smarthome/blob/e4540b5381d60b4d5167f1038828fd334ea79ba9/media/homekit.png" width="400">
+
+```
+http://<raspberry_address>:8123
+```
+Go to `Configuration/Integrations`. Here you can find your device discovered and click `Configure` button to add it by Homekit Controller integration. You have to enter pairing code of your device, which you can find on the sticker on your device.
+
+![configure1](media/configure1.png)
+
+![configure2](media/configure2.png)
+
+
+## Configuration file
+
 Then we need to setup action to send data to Robonomics. For that open a configuration file:
 
 ```bash
