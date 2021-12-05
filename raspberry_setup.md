@@ -56,7 +56,7 @@ Password is "ubuntu".
 
 ## Home Assistant
 
-Now we need to install Home Assistant to Raspberry. Installation instructions are [here](https://www.home-assistant.io/installation/linux#install-home-assistant-core). You need to install `Home Assistant Core`.
+Now we need to install Home Assistant to Raspberry. Installation instructions are [here](https://www.home-assistant.io/installation/linux#install-home-assistant-core). You need to install `Home Assistant Core`. It's actual version is 2021.11.5 and instruction assumes that we already have installed Python 3.9 (including the package python3-dev) or newer.
 
 After installation you must be under `homeassistant` user. If you are not log in:
 ```bash
@@ -82,7 +82,12 @@ MNEMONIC_SEED = <your mnemonic>
 
 ## Substrate Interface
 
-To pub data to Robonomics you need to install `substrate-interface` python package (you need to install RUST before) to your raspberry. Be sure that you're logged in as `homeassistant` user, if not do the following:
+To pub data to Robonomics you need to install `substrate-interface` python package (you need to install RUST before) to your raspberry. At first need to exit to system user named "ubuntu" and install some required packages:
+```bash
+exit
+sudo apt install libcurl4-openssl-dev libssl-dev
+```
+Then you need to log in as `homeassistant` again:
 ```bash
 sudo -u homeassistant -H -s
 ```
@@ -92,9 +97,8 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
 rustup default nightly
 ```
-And install nessesary python packages to the virtual environment:
+And install necessary python packages to the virtual environment:
 ```bash
-sudo apt install libcurl4-openssl-dev libssl-dev
 cd /srv/homeassistant
 source bin/activate
 pip3 install pynacl packaging pycurl substrate-interface
@@ -104,7 +108,7 @@ pip3 install pynacl packaging pycurl substrate-interface
 Now change user (you can run under any user, which allows you to use sudo):
 
 ```bash
-su ubuntu
+exit
 ```
 
 Move to /etc/systemd/system and create new service for home assistant start: 
@@ -146,7 +150,7 @@ After=network-online.target
 Type=simple
 User=%i
 WorkingDirectory=/srv/%i/
-ExecStart=/srv/homeassistant/bin/python3.8 "/srv/%i/python_scripts/control.py"
+ExecStart=/srv/homeassistant/bin/python3.9 "/srv/%i/python_scripts/control.py"
 Environment="PATH=/srv/%i/bin"
 
 [Install]
