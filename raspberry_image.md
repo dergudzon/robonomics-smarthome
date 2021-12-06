@@ -1,9 +1,16 @@
-# Use Prepared Image
+# Prepared Image
+We prepared image for more easily usage of Home Assistant with Robonomics on RaspberryP. You can download it there:\
 
-Download an image (link).
+What preinstalled in the image:
+- Ubuntu Server 21.10 (3/4/400): 64-bit server OS for arm64 archtectures
+- Python 3.9.7
+- Home Assistant Core 2021.11.5
+- rustc 1.59.0-nightly (efec54529 2021-12-04)
+- substrate-interface 1.1.2
 
+# How To Use The Prepared Image
 Install [Raspberry Pi Imager](https://www.raspberrypi.com/software/) on your computer. Insert SD card and run Imager. In `Operating System` select `Use custom` and choose downloaded `.img` file. Then select you SD card and click `WRITE`.
-
+![imager](media/use_custom_image.png)
 ![imager](media/imager_prep.png)
 
 After writing is comlete, open SD card and navigate inside the root folder of the card. The name should be something like `system-boot`.
